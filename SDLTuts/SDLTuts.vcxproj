@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimTest.cpp" />
     <ClCompile Include="GeometryTest.cpp" />
     <ClCompile Include="InputTest.cpp" />
     <ClCompile Include="LTexture.cpp" />

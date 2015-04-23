@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "Enums.h"
 #include "LTexture.h"
@@ -11,12 +12,14 @@
 //Global constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+const int WALKING_ANIMATION_FRAMES = 4;
 
 //Global variables
 SDL_Window* gWindow = nullptr;
 SDL_Renderer* gRenderer = nullptr;
-SDL_Rect gSpriteClip[4];
-LTexture gSpriteSheet;
+LTexture gTexture;
+SDL_Rect gSpriteClips[WALKING_ANIMATION_FRAMES];
+
 
 //Function declarations
 bool Init();									//Init sdl
@@ -41,6 +44,13 @@ int main(int argc, char* args[]) {
 			//Event handler
 			SDL_Event event;
 
+			//Animation
+			int frame = 0;
+
+			//Angle
+			double degrees = 0;
+			SDL_RendererFlip flipType = SDL_FLIP_NONE;
+
 			//Main loop
 			while (!quit) {
 				//Poll for events/input
@@ -52,6 +62,34 @@ int main(int argc, char* args[]) {
 						if (event.key.keysym.sym == SDLK_ESCAPE){
 							quit = true;
 						}
+						switch (event.key.keysym.sym){
+						case SDLK_ESCAPE:
+							quit = true;
+							break;
+
+						case SDLK_a:
+							degrees -= 60;
+							break;
+
+						case SDLK_d:
+							degrees += 60;
+							break;
+
+						case SDLK_q:
+							flipType = SDL_FLIP_HORIZONTAL;
+							break;
+
+						case SDLK_w:
+							flipType = SDL_FLIP_NONE;
+							break;
+							
+						case SDLK_e:
+							flipType = SDL_FLIP_VERTICAL;
+							break;
+
+						default:
+							break;
+						}
 					}
 				}
 
@@ -59,13 +97,15 @@ int main(int argc, char* args[]) {
 				SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 				SDL_RenderClear(gRenderer);
 
-				gSpriteSheet.Render(0, 0, &gSpriteClip[0]);
-				gSpriteSheet.Render(SCREEN_WIDTH - gSpriteClip[1].w, 0, &gSpriteClip[1]);
-				gSpriteSheet.Render(0, SCREEN_HEIGHT - gSpriteClip[2].h, &gSpriteClip[2]);
-				gSpriteSheet.Render(SCREEN_WIDTH - gSpriteClip[3].w, SCREEN_HEIGHT - gSpriteClip[3].h, &gSpriteClip[3]);
+				SDL_Rect* current = &gSpriteClips[frame / 4];
+				gTexture.Render((SCREEN_WIDTH - current->w) / 2, (SCREEN_HEIGHT - current->h) / 2, current, degrees, nullptr, flipType);
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);
+
+				++frame;
+
+				if (frame / 4 >= WALKING_ANIMATION_FRAMES) frame = 0;
 			}
 		}
 	}
@@ -95,7 +135,7 @@ bool Init() {
 		}
 		else {
 			//Create a renderer
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 			if (gRenderer == nullptr){
 				printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -120,37 +160,40 @@ bool LoadMedia() {
 	//Loading flag
 	bool success = true;
 
-	if (gSpriteSheet.LoadFromFile("dots.png")) {
-		gSpriteClip[0].x = 0;
-		gSpriteClip[0].y = 0;
-		gSpriteClip[0].w = 100;
-		gSpriteClip[0].h = 100;
-		
-		gSpriteClip[1].x = 100;
-		gSpriteClip[1].y = 0;
-		gSpriteClip[1].w = 100;
-		gSpriteClip[1].h = 100;
+	if (gTexture.LoadFromFile("foo.png")) {
+		gSpriteClips[0].x = 0;
+		gSpriteClips[0].y = 0;
+		gSpriteClips[0].w = 64;
+		gSpriteClips[0].h = 205;
 
-		gSpriteClip[2].x = 0;
-		gSpriteClip[2].y = 100;
-		gSpriteClip[2].w = 100;
-		gSpriteClip[2].h = 100;
+		gSpriteClips[1].x = 64;
+		gSpriteClips[1].y = 0;
+		gSpriteClips[1].w = 64;
+		gSpriteClips[1].h = 205;
 
-		gSpriteClip[3].x = 100;
-		gSpriteClip[3].y = 100;
-		gSpriteClip[3].w = 100;
-		gSpriteClip[3].h = 100;
+		gSpriteClips[2].x = 128;
+		gSpriteClips[2].y = 0;
+		gSpriteClips[2].w = 64;
+		gSpriteClips[2].h = 205;
+
+		gSpriteClips[3].x = 196;
+		gSpriteClips[3].y = 0;
+		gSpriteClips[3].w = 64;
+		gSpriteClips[3].h = 205;
 	}
 	else {
 		success = false;
 	}
+
+	
 	
 	return success;
 }
 
 void Close() {
 	//Deallocate memory
-	gSpriteSheet.Free();
+	gTexture.Free();
+
 	
 	//Destroy window
 	SDL_DestroyRenderer(gRenderer);

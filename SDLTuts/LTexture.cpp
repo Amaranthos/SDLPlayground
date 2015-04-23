@@ -54,7 +54,7 @@ void LTexture::Free() {
 	}
 }
 
-void LTexture::Render(int x, int y, SDL_Rect* clip) {
+void LTexture::Render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* centre, SDL_RendererFlip flip) {
 	//Set render space
 	SDL_Rect renderQuad = { x, y, width, height };
 
@@ -64,5 +64,17 @@ void LTexture::Render(int x, int y, SDL_Rect* clip) {
 	}
 
 	//Render
-	SDL_RenderCopy(gRenderer, texture, clip, &renderQuad);
+	SDL_RenderCopyEx(gRenderer, texture, clip, &renderQuad, angle, centre, flip);
+}
+
+void LTexture::SetColour(Uint8 r, Uint8 g, Uint8 b) {
+	SDL_SetTextureColorMod(texture, r, g, b);
+}
+
+void LTexture::SetAlpha(Uint8 a){
+	SDL_SetTextureAlphaMod(texture, a);
+}
+
+void LTexture::SetBlendMode(SDL_BlendMode blendMode) {
+	SDL_SetTextureBlendMode(texture, blendMode);
 }
