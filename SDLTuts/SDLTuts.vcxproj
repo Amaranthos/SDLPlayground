@@ -12,16 +12,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimTest.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonTest.cpp" />
     <ClCompile Include="GeometryTest.cpp" />
     <ClCompile Include="InputTest.cpp" />
-    <ClCompile Include="LTexture.cpp" />
+    <ClCompile Include="TextTest.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SpriteSheetTest.cpp" />
     <ClCompile Include="TextureTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Enums.h" />
-    <ClInclude Include="LTexture.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8C702E81-7D2E-4086-8200-2EA32603AF02}</ProjectGuid>
@@ -63,7 +67,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>

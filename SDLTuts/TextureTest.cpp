@@ -2,16 +2,16 @@
 //
 //extern SDL_Renderer* gRenderer;
 //
-//LTexture::LTexture() : texture(nullptr), width(0), height(0){
+//LGame::Texture::LTexture() : texture(nullptr), width(0), height(0){
 //
 //}
 //
 //
-//LTexture::~LTexture() {
+//LGame::Texture::~LTexture() {
 //	Free();
 //}
 //
-//bool LTexture::LoadFromFile(const std::string& path) {
+//bool LGame::Texture::LoadFromFile(const std::string& path) {
 //	//Dealloacte preexisting image
 //	Free();
 //
@@ -45,7 +45,7 @@
 //	return texture != nullptr;
 //}
 //
-//void LTexture::Free() {
+//void LGame::Texture::Free() {
 //	if (texture) {
 //		SDL_DestroyTexture(texture);
 //		texture = nullptr;
@@ -54,7 +54,7 @@
 //	}
 //}
 //
-//void LTexture::Render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* centre, SDL_RendererFlip flip) {
+//void LGame::Texture::Render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* centre, SDL_RendererFlip flip) {
 //	//Set render space
 //	SDL_Rect renderQuad = { x, y, width, height };
 //
@@ -67,14 +67,14 @@
 //	SDL_RenderCopyEx(gRenderer, texture, clip, &renderQuad, angle, centre, flip);
 //}
 //
-//void LTexture::SetColour(Uint8 r, Uint8 g, Uint8 b) {
+//void LGame::Texture::SetColour(Uint8 r, Uint8 g, Uint8 b) {
 //	SDL_SetTextureColorMod(texture, r, g, b);
 //}
 //
-//void LTexture::SetAlpha(Uint8 a){
+//void LGame::Texture::SetAlpha(Uint8 a){
 //	SDL_SetTextureAlphaMod(texture, a);
 //}
 //
-//void LTexture::SetBlendMode(SDL_BlendMode blendMode) {
+//void LGame::Texture::SetBlendMode(SDL_BlendMode blendMode) {
 //	SDL_SetTextureBlendMode(texture, blendMode);
 //}

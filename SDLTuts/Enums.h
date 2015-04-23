@@ -1,8 +1,21 @@
+#ifndef ENUMS_H
+#define ENUMS_H
+
 enum KeyPressSurfaces {
-	Key_Press_Surface_Default,
-	Key_Press_Surface_Up,
-	Key_Press_Surface_Down,
-	Key_Press_Surface_Left,
-	Key_Press_Surface_Right,
-	Key_Press_Surface_Total
+	KP_Default,
+	KP_Up,
+	KP_Down,
+	KP_Left,
+	KP_Right,
+	KP_Total
 };
+
+enum LeftButtonSprite {
+	Out,
+	Over_Motion,
+	Down,
+	Up,
+	Total = 4
+};
+
+#endif //BUTTONS_H

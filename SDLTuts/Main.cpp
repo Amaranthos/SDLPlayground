@@ -7,18 +7,22 @@
 #include <SDL_ttf.h>
 
 #include "Enums.h"
-#include "LTexture.h"
+#include "Texture.h"
+#include "Button.h"
 
 //Global constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-const int WALKING_ANIMATION_FRAMES = 4;
+const int TOTAL_BUTTONS = 4;
 
 //Global variables
 SDL_Window* gWindow = nullptr;
 SDL_Renderer* gRenderer = nullptr;
-LTexture gTexture;
-SDL_Rect gSpriteClips[WALKING_ANIMATION_FRAMES];
+Game::Texture gTexture;
+Game::Texture gButtonTexture;
+SDL_Rect gButtonClip[Total];
+TTF_Font* gFont = nullptr;
+Game::Button gButtons[TOTAL_BUTTONS];
 
 
 //Function declarations
@@ -44,12 +48,7 @@ int main(int argc, char* args[]) {
 			//Event handler
 			SDL_Event event;
 
-			//Animation
-			int frame = 0;
-
-			//Angle
-			double degrees = 0;
-			SDL_RendererFlip flipType = SDL_FLIP_NONE;
+	
 
 			//Main loop
 			while (!quit) {
@@ -59,37 +58,17 @@ int main(int argc, char* args[]) {
 						quit = true;
 					}
 					else if (event.type == SDL_KEYDOWN){
-						if (event.key.keysym.sym == SDLK_ESCAPE){
-							quit = true;
-						}
 						switch (event.key.keysym.sym){
 						case SDLK_ESCAPE:
 							quit = true;
 							break;
-
-						case SDLK_a:
-							degrees -= 60;
-							break;
-
-						case SDLK_d:
-							degrees += 60;
-							break;
-
-						case SDLK_q:
-							flipType = SDL_FLIP_HORIZONTAL;
-							break;
-
-						case SDLK_w:
-							flipType = SDL_FLIP_NONE;
-							break;
-							
-						case SDLK_e:
-							flipType = SDL_FLIP_VERTICAL;
-							break;
-
 						default:
 							break;
 						}
+					}
+
+					for (int i = 0; i < TOTAL_BUTTONS; ++i) {
+						gButtons[i].HandleEvent(&event);
 					}
 				}
 
@@ -97,15 +76,12 @@ int main(int argc, char* args[]) {
 				SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 				SDL_RenderClear(gRenderer);
 
-				SDL_Rect* current = &gSpriteClips[frame / 4];
-				gTexture.Render((SCREEN_WIDTH - current->w) / 2, (SCREEN_HEIGHT - current->h) / 2, current, degrees, nullptr, flipType);
+				for (int i = 0; i < TOTAL_BUTTONS; ++i){
+					gButtons[i].Render();
+				}
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);
-
-				++frame;
-
-				if (frame / 4 >= WALKING_ANIMATION_FRAMES) frame = 0;
 			}
 		}
 	}
@@ -144,10 +120,16 @@ bool Init() {
 			else {
 				//Init renderer colour
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
 				//Init PNG loading
 				int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG;
 				if (!(IMG_Init(imgFlags) & imgFlags)) {
 					printf("SDL_Image could not initialize! SDL_Image_ErrorL %s\n", IMG_GetError());
+					success = false;
+				}
+				//Init SDL_TTF
+				if (TTF_Init() == -1) {
+					printf("SDL_TTF could not initalize! SDL_TTF Error: %s\n", TTF_GetError());
 					success = false;
 				}
 			}
@@ -160,40 +142,30 @@ bool LoadMedia() {
 	//Loading flag
 	bool success = true;
 
-	if (gTexture.LoadFromFile("foo.png")) {
-		gSpriteClips[0].x = 0;
-		gSpriteClips[0].y = 0;
-		gSpriteClips[0].w = 64;
-		gSpriteClips[0].h = 205;
-
-		gSpriteClips[1].x = 64;
-		gSpriteClips[1].y = 0;
-		gSpriteClips[1].w = 64;
-		gSpriteClips[1].h = 205;
-
-		gSpriteClips[2].x = 128;
-		gSpriteClips[2].y = 0;
-		gSpriteClips[2].w = 64;
-		gSpriteClips[2].h = 205;
-
-		gSpriteClips[3].x = 196;
-		gSpriteClips[3].y = 0;
-		gSpriteClips[3].w = 64;
-		gSpriteClips[3].h = 205;
+	if (gButtonTexture.LoadFromFile("button.png")) {
+		for (int i = 0; i < LeftButtonSprite::Total; ++i) {
+			gButtonClip[i].x = 0;
+			gButtonClip[i].y = i * 200;
+			gButtonClip[i].w = Game::Button::WIDTH;
+			gButtonClip[i].h = Game::Button::HEIGHT;
+		}
 	}
-	else {
-		success = false;
-	}
+	
+	gButtons[0].SetPosition(0, 0);
+	gButtons[1].SetPosition(SCREEN_WIDTH - Game::Button::WIDTH, 0);
+	gButtons[2].SetPosition(0, SCREEN_HEIGHT - Game::Button::HEIGHT);
+	gButtons[3].SetPosition(SCREEN_WIDTH - Game::Button::WIDTH, SCREEN_HEIGHT - Game::Button::HEIGHT);
 
-	
-	
 	return success;
 }
 
 void Close() {
 	//Deallocate memory
 	gTexture.Free();
+	gButtonTexture.Free();
 
+	TTF_CloseFont(gFont);
+	gFont = nullptr;
 	
 	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
@@ -202,6 +174,7 @@ void Close() {
 	gRenderer = nullptr;
 
 	//Quit
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
