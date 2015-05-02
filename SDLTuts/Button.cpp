@@ -1,8 +1,5 @@
 #include "Button.h"
 
-extern Game::Texture gButtonTexture;
-extern SDL_Rect gButtonClip[Total];
-
 Game::Button::Button() : position({ 0, 0 }), currSprite(LeftButtonSprite::Out) {
 
 }
@@ -48,6 +45,10 @@ void Game::Button::HandleEvent(SDL_Event* event) {
 	}
 }
 
+#ifdef BUTTON_H
+extern Game::Texture gButtonTexture;
+extern SDL_Rect gButtonClip[Total];
 void Game::Button::Render() {
 	gButtonTexture.Render(position.x, position.y, &gButtonClip[currSprite]);
 }
+#endif

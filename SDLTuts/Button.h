@@ -7,9 +7,7 @@
 #include "Texture.h"
 
 namespace Game {
-	
-	class Button
-	{
+	class Button {
 	public:
 		Button();
 
@@ -20,12 +18,11 @@ namespace Game {
 
 		static const int WIDTH = 300;
 		static const int HEIGHT = 200;
+
 	private:
 		SDL_Point position;
-
 		LeftButtonSprite currSprite;
 	};
 }
-
 #endif //BUTTON_H
 

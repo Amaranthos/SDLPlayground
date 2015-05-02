@@ -1,9 +1,7 @@
 #include "Texture.h"
 
-extern SDL_Renderer* gRenderer;
-
-Game::Texture::Texture() : texture(nullptr), width(0), height(0){
-
+Game::Texture::Texture() : width(0), height(0){
+	texture = nullptr;
 }
 
 
@@ -11,7 +9,7 @@ Game::Texture::~Texture() {
 	Free();
 }
 
-bool Game::Texture::LoadFromFile(const std::string& path) {
+bool Game::Texture::LoadFromFile(const std::string& path, SDL_Renderer* renderer) {
 	//Dealloacte preexisting image
 	Free();
 	
@@ -25,7 +23,7 @@ bool Game::Texture::LoadFromFile(const std::string& path) {
 		SDL_SetColorKey(loadedImage, SDL_TRUE, SDL_MapRGB(loadedImage->format, 0, 255, 255));
 
 		//Create the texture
-		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedImage);
+		newTexture = SDL_CreateTextureFromSurface(renderer, loadedImage);
 
 		if (newTexture) {
 			width = loadedImage->w;
@@ -51,7 +49,7 @@ bool Game::Texture::LoadFromRenderedText(std::string textureText, SDL_Color text
 	//Deallocate prexisting image
 	Free();
 	
-	SDL_Surface* textImage = TTF_RenderText_Blended(gFont, textureText.c_str(), textColour);
+	SDL_Surface* textImage = TTF_RenderUTF8_Blended(gFont, textureText.c_str(), textColour);
 
 	if (textImage) {
 		//Create the texture
@@ -75,7 +73,8 @@ bool Game::Texture::LoadFromRenderedText(std::string textureText, SDL_Color text
 }
 #endif
 
-void Game::Texture::Render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* centre, SDL_RendererFlip flip) {
+void Game::Texture::Render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip, double angle,
+	SDL_Point* centre, SDL_RendererFlip flip) {
 	//Set render space
 	SDL_Rect renderQuad = { x, y, width, height };
 
@@ -85,7 +84,7 @@ void Game::Texture::Render(int x, int y, SDL_Rect* clip, double angle, SDL_Point
 	}
 
 	//Render
-	SDL_RenderCopyEx(gRenderer, texture, clip, &renderQuad, angle, centre, flip);
+	SDL_RenderCopyEx(renderer, texture, clip, &renderQuad, angle, centre, flip);
 }
 
 void Game::Texture::SetColour(Uint8 r, Uint8 g, Uint8 b) {

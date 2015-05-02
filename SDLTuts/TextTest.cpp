@@ -25,7 +25,6 @@
 //bool Init();									//Init sdl
 //bool LoadMedia();								//Load in resources
 //void Close();									//Free memory
-//SDL_Texture* LoadTexture(std::string path);		//Loads an image
 //
 //int main(int argc, char* args[]) {
 //	//Init
@@ -166,25 +165,4 @@
 //	TTF_Quit();
 //	IMG_Quit();
 //	SDL_Quit();
-//}
-//
-//SDL_Texture* LoadTexture(std::string path){
-//	SDL_Texture* newTexture = nullptr;
-//
-//	//Load image at path
-//	SDL_Surface* loadedImage = IMG_Load(path.c_str());
-//
-//	if (loadedImage == nullptr) {
-//		printf("Unable to load image %s! SDL_Error: %s\n", path.c_str(), IMG_GetError());
-//	}
-//	else {
-//		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedImage);
-//
-//		if (newTexture == nullptr) {
-//			printf("Unable to create texture from %S! SDL_Error: %S\n", path.c_str(), SDL_GetError());
-//		}
-//
-//		SDL_FreeSurface(loadedImage);
-//	}
-//	return newTexture;
 //}

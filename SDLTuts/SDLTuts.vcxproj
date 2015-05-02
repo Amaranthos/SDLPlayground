@@ -12,20 +12,36 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimTest.cpp" />
+    <ClCompile Include="AudioTest.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonTest.cpp" />
+    <ClCompile Include="CollisionTest.cpp" />
+    <ClCompile Include="Dot.cpp" />
+    <ClCompile Include="FrameRateTest.cpp" />
     <ClCompile Include="GeometryTest.cpp" />
     <ClCompile Include="InputTest.cpp" />
+    <ClCompile Include="JoystickTest.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="TextInputTest.cpp" />
     <ClCompile Include="TextTest.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SpriteSheetTest.cpp" />
     <ClCompile Include="TextureTest.cpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TimerTest.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Dot.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8C702E81-7D2E-4086-8200-2EA32603AF02}</ProjectGuid>
@@ -58,6 +74,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)\..\..\Libraries\SDL2\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\..\Libraries\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)</OutDir>
+    <IntDir>$(ProjectDir)\$(Configuration)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -67,7 +85,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>

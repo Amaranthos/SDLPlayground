@@ -18,4 +18,4 @@ enum LeftButtonSprite {
 	Total = 4
 };
 
-#endif //BUTTONS_H
+#endif //ENUMS_H
